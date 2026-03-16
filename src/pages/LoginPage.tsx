@@ -1,61 +1,50 @@
 import { useForm } from "react-hook-form";
 import { loginUser } from "../services/authService";
+import { Link } from "react-router-dom";
+import "./LoginPage.css";
 
-export default function LoginPage(){
+export default function LoginPage() {
 
   const { register, handleSubmit } = useForm();
 
   const onSubmit = async (data:any) => {
-
     console.log("Login Data:", data);
 
-    try{
-
+    try {
       const res = await loginUser(data);
 
       localStorage.setItem("token", res.token);
       localStorage.setItem("role", res.role);
-
+      localStorage.setItem("email", res.email);
       alert("Login success");
 
-      window.location.href="/dashboard";
-
-    }catch(err){
+      window.location.href = "/dashboard";
+    } catch (err) {
       console.error(err);
       alert("Login failed");
     }
-
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="bg-white shadow p-6 w-80"
-      >
 
-        <h2 className="text-xl mb-4">Login</h2>
+    <div className="main">
 
-        <input
-          {...register("email")}
-          placeholder="Email"
-          className="border p-2 w-full mb-2"
-        />
+      <form onSubmit={handleSubmit(onSubmit)}>
 
-        <input
-          {...register("password")}
-          type="password"
-          placeholder="Password"
-          className="border p-2 w-full mb-3"
-        />
 
-        <button type="submit" className="bg-green-500 text-white p-2 w-full">
-          Login
-        </button>
+        <h3>Login</h3>
+        <input {...register("email")} type="email" placeholder="Email" required /> 
+        <input{...register("password")} type="password" placeholder="Password" required/>
+        <h6><a href="#">Forgot password?</a></h6>
+        <input type="submit" value="Login"/>
+        <h6>Don't have an account? <Link to= "/register">Rigister</Link></h6>
+
 
       </form>
+     
 
     </div>
   );
 }
+         
